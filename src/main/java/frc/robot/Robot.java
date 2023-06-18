@@ -7,6 +7,15 @@ package frc.robot;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
+import frc.robot.subsystems.RobotArm;
+import edu.wpi.first.wpilibj.XboxController;
+
+import com.ctre.phoenix6.hardware.TalonFX;
+import com.ctre.phoenix6.configs.TalonFXConfiguration;
+
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+
+
 
 /**
  * The VM is configured to automatically run this class, and to call the functions corresponding to
@@ -19,6 +28,10 @@ public class Robot extends TimedRobot {
 
   private RobotContainer m_robotContainer;
 
+  private final RobotArm m_arm = new RobotArm();
+
+  private final TalonFX m_motor = new TalonFX(0);
+
   /**
    * This function is run when the robot is first started up and should be used for any
    * initialization code.
@@ -28,6 +41,15 @@ public class Robot extends TimedRobot {
     // Instantiate our RobotContainer.  This will perform all our button bindings, and put our
     // autonomous chooser on the dashboard.
     m_robotContainer = new RobotContainer();
+
+    TalonFXConfiguration configs = new TalonFXConfiguration();
+
+    configs.Slot0.kP = 0.199;
+    configs.Slot0.kI = 0.8;
+    configs.Slot0.kD = 0.023127;
+    
+    m_motor.getConfigurator().apply(configs);
+
   }
 
   /**
@@ -48,7 +70,9 @@ public class Robot extends TimedRobot {
 
   /** This function is called once each time the robot enters Disabled mode. */
   @Override
-  public void disabledInit() {}
+  public void disabledInit() {
+    m_arm.stop();
+  }
 
   @Override
   public void disabledPeriodic() {}
@@ -80,8 +104,12 @@ public class Robot extends TimedRobot {
   }
 
   /** This function is called periodically during operator control. */
+
   @Override
-  public void teleopPeriodic() {}
+  public void teleopPeriodic() {
+    m_arm.idle();
+
+  }
 
   @Override
   public void testInit() {
@@ -95,9 +123,22 @@ public class Robot extends TimedRobot {
 
   /** This function is called once when the robot is first started up. */
   @Override
-  public void simulationInit() {}
+  public void simulationInit() {
+
+
+  }
 
   /** This function is called periodically whilst in simulation. */
   @Override
-  public void simulationPeriodic() {}
+  public void simulationPeriodic() {
+    m_arm.simulationPeriodic();
+    SmartDashboard.putNumber("position error", m_motor.getClosedLoopError().getValue());
+    SmartDashboard.putNumber("Control Effort", m_motor.getDutyCycle().getValue());
+  }
+
+  @Override
+  public void close() {
+    m_arm.close();
+    super.close();
+  }
 }
