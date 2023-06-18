@@ -33,6 +33,10 @@ public final class Constants {
     public static final double kMinAngleRads = Units.degreesToRadians(-75);
     public static final double kMaxAngleRads = Units.degreesToRadians(255);
 
-    public static final double m_armSetpointDegrees = 180;
+    public static final double kP = 0.199;
+    public static final double kI = 0.8;
+    public static final double kD =  0.023127;
+
+    public static final double m_armSetpointDegrees = 0;
   
 }

@@ -80,14 +80,10 @@ public class RobotArm extends SubsystemBase {
         m_arm.setAngle(Units.radiansToDegrees(m_armSim.getAngleRads()));
     }
 
-    public void reachSetpoint() {
-
-    }
-
     ArmFeedforward feedforward = new ArmFeedforward(0.44,3.06,0.18);
 
 
-    public void idle() {
+    public void reachSetpoint() {
 
         PositionVoltage positionVoltage = new PositionVoltage(0, false, feedforward.calculate(Units.degreesToRadians(m_armSetpointDegrees), 0) , 0, false);        
         m_motor.setControl(positionVoltage.withPosition(m_armSetpointDegrees));

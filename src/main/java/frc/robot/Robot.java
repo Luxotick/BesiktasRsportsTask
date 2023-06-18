@@ -8,7 +8,6 @@ import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import frc.robot.subsystems.RobotArm;
-import edu.wpi.first.wpilibj.XboxController;
 
 import com.ctre.phoenix6.hardware.TalonFX;
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
@@ -44,9 +43,9 @@ public class Robot extends TimedRobot {
 
     TalonFXConfiguration configs = new TalonFXConfiguration();
 
-    configs.Slot0.kP = 0.199;
-    configs.Slot0.kI = 0.8;
-    configs.Slot0.kD = 0.023127;
+    configs.Slot0.kP = Constants.kP;
+    configs.Slot0.kI = Constants.kI;
+    configs.Slot0.kD = Constants.kD;
     
     m_motor.getConfigurator().apply(configs);
 
@@ -107,7 +106,7 @@ public class Robot extends TimedRobot {
 
   @Override
   public void teleopPeriodic() {
-    m_arm.idle();
+    m_arm.reachSetpoint();
 
   }
 
